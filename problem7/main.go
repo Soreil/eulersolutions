@@ -3,7 +3,14 @@ package main
 //Problem:
 //By listing the first six prime numbers: 2, 3, 5, 7, 11, and 13, we can see that the 6th prime is 13.
 //What is the 10 001st prime number?
+
+//Solution:
+//Use the Sieve of Arasthosis to find the actual primes
+//Use n (log n + log log n) to set the Sieve size to just over where the nth prime should be
+//Count until we hit the nth prime
+
 import "fmt"
+import "math"
 import "os"
 import "strconv"
 
@@ -28,14 +35,22 @@ func fill(n []int) []int {
 	return n
 }
 
-func countprimes(n []int) int {
+func countprimes(n []int, m int) (int, int) {
 	count := 0
+	nth := 0
 	for _, v := range n {
 		if v != 0 {
 			count++
+			if count == m {
+				nth = v
+			}
 		}
 	}
-	return count
+	return count, nth
+}
+
+func approx(n float64) int {
+	return int(n * (math.Log(n) + math.Log(math.Log(n))))
 }
 
 func main() {
@@ -45,9 +60,18 @@ func main() {
 	} else {
 		panic("Enter a number")
 	}
-	list := make([]int, n)
+
+	estimate := float64(approx(float64(n)))
+	list := make([]int, int(estimate))
 	fill(list)
+
 	sievedlist := sieve(list)
-	count := countprimes(sievedlist)
+
+	count, nth := countprimes(sievedlist, n)
 	fmt.Println("amount of primes", count)
+	if nth != 0 {
+		fmt.Printf("%dth prime: %d\n", n, nth)
+	} else {
+		fmt.Printf("Failed to find the %dth prime!\n", n)
+	}
 }

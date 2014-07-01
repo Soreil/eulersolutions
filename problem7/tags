@@ -4,8 +4,15 @@
 !_TAG_PROGRAM_NAME	Exuberant Ctags	//
 !_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
 !_TAG_PROGRAM_VERSION	5.9~svn20110310	//
-countprimes	main.go	/^func countprimes(n []int) int {$/;"	f
+approx	logbased.go	/^func approx(n float64) int {$/;"	f
+approx	main.go	/^func approx(n float64) int {$/;"	f
+countprimes	logbased.go	/^func countprimes(n []int, m int) (int, int) {$/;"	f
+countprimes	main.go	/^func countprimes(n []int, m int) (int, int) {$/;"	f
+fill	logbased.go	/^func fill(n []int) []int {$/;"	f
 fill	main.go	/^func fill(n []int) []int {$/;"	f
+main	logbased.go	/^func main() {$/;"	f
+main	logbased.go	/^package main$/;"	p
 main	main.go	/^func main() {$/;"	f
 main	main.go	/^package main$/;"	p
+sieve	logbased.go	/^func sieve(n []int) []int {$/;"	f
 sieve	main.go	/^func sieve(n []int) []int {$/;"	f
