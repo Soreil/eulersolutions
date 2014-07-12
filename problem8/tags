@@ -4,7 +4,6 @@
 !_TAG_PROGRAM_NAME	Exuberant Ctags	//
 !_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
 !_TAG_PROGRAM_VERSION	5.9~svn20110310	//
-factor	scratch.go	/^func factor(n int) []int {$/;"	f
-get_triangulars	scratch.go	/^func get_triangulars(n int) []int {$/;"	f
-main	scratch.go	/^func main() {$/;"	f
-main	scratch.go	/^package main$/;"	p
+adjacent_digits	main.go	/^func adjacent_digits(s string, n int) int {$/;"	f
+main	main.go	/^func main() {$/;"	f
+main	main.go	/^package main$/;"	p
