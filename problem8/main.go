@@ -32,7 +32,7 @@ var digits string = "73167176531330624919225119674426574742355349194934969835203
 
 func biggestProduct(n int64) (int64, []int64) {
 	numbers := make([]int64, n)
-	//biggestSum := int64(0)
+	biggestSum := int64(0)
 	biggestProduct := int64(0)
 	var tmpNumbers []int64
 
@@ -40,13 +40,13 @@ func biggestProduct(n int64) (int64, []int64) {
 
 		tmpNumbers, _ = adjacentDigits(i, n)
 
-		//if tmpBiggestSum > biggestSum {
-		if product(tmpNumbers) > product(numbers) {
-			numbers = tmpNumbers
-			//biggestSum = tmpBiggestSum
-			biggestProduct = product(numbers)
+		if tmpBiggestSum > biggestSum {
+			if product(tmpNumbers) > product(numbers) {
+				numbers = tmpNumbers
+				biggestSum = tmpBiggestSum
+				biggestProduct = product(numbers)
+			}
 		}
-		//}
 	}
 	return biggestProduct, numbers
 }
