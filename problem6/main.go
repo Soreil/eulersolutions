@@ -14,5 +14,5 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println(sumSqDif(int(n)))
+	fmt.Println(int(sumSqDif(int(n))))
 }
