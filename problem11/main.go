@@ -1,6 +1,10 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"os"
+	"strconv"
+)
 
 //
 //
@@ -30,7 +34,88 @@ import "fmt"
 //The product of these numbers is 26 × 63 × 78 × 14 = 1788696.
 //
 //What is the greatest product of four adjacent numbers in the same direction (up, down, left, right, or diagonally) in the 20×20 grid?
-var grid [19][20]uint8
+const (
+	height = 20
+	width  = 20
+)
+
+var grid [height][width]uint8
+var resultgrid [height][width]int
+
+func Step(x, y int, n int, c chan int) {
+	if x < width-1 {
+		go Walk(x+1, y, n, c)
+	}
+	if y < height-1 {
+		go Walk(x, y+1, n, c)
+	}
+	if x < width-1 && y < width-1 {
+		go Walk(x+1, y+1, n, c)
+	}
+	if x == width-1 && y+n >= height-1 {
+		c <- -1
+		return
+	}
+}
+
+func Walk(x, y, n int, c chan int) {
+	product := 1
+	// walk North-West
+	if x > n && y > n {
+		product = 1
+		for i := 0; i < n; i++ {
+			product *= int(grid[y-i][x-i])
+			resultgrid[y-i][x-i] = 1
+		}
+		c <- product
+	}
+	// walk North-East
+	if x+n < width && y > n {
+		product = 1
+		for i := 0; i < n; i++ {
+			product *= int(grid[y-i][x+i])
+			resultgrid[y-i][x+i] = 1
+		}
+		c <- product
+	}
+	// walk South-West
+	if x > n && y+n < height {
+		product = 1
+		for i := 0; i < n; i++ {
+			product *= int(grid[y+i][x-i])
+			resultgrid[y+i][x-i] = 1
+		}
+		c <- product
+	}
+	// walk South-East
+	if x+n < width && y+n < height {
+		product = 1
+		for i := 0; i < n; i++ {
+			product *= int(grid[y+i][x+i])
+			resultgrid[y+i][x+i] = 1
+		}
+		c <- product
+	}
+	// walk South
+	if x < width && y+n < height {
+		product = 1
+		for i := 0; i < n; i++ {
+			product *= int(grid[y+i][x])
+			resultgrid[y+i][x] = 1
+		}
+		c <- product
+	}
+	// walk East
+	if x+n < width && y < height {
+		product = 1
+		for i := 0; i < n; i++ {
+			product *= int(grid[y][x+i])
+			resultgrid[y][x+i] = 1
+		}
+		c <- product
+	}
+	go Step(x, y, n, c)
+}
 
 func main() {
 	grid[0] = [20]uint8{8, 2, 22, 97, 38, 15, 0, 40, 0, 75, 4, 5, 7, 78, 52, 12, 50, 77, 91, 8}
@@ -42,18 +127,32 @@ func main() {
 	grid[6] = [20]uint8{32, 98, 81, 28, 64, 23, 67, 10, 26, 38, 40, 67, 59, 54, 70, 66, 18, 38, 64, 70}
 	grid[7] = [20]uint8{67, 26, 20, 68, 2, 62, 12, 20, 95, 63, 94, 39, 63, 8, 40, 91, 66, 49, 94, 21}
 	grid[8] = [20]uint8{24, 55, 58, 5, 66, 73, 99, 26, 97, 17, 78, 78, 96, 83, 14, 88, 34, 89, 63, 72}
-	grid[8] = [20]uint8{21, 36, 23, 9, 75, 0, 76, 44, 20, 45, 35, 14, 0, 61, 33, 97, 34, 31, 33, 95}
-	grid[9] = [20]uint8{78, 17, 53, 28, 22, 75, 31, 67, 15, 94, 3, 80, 4, 62, 16, 14, 9, 53, 56, 92}
-	grid[10] = [20]uint8{16, 39, 5, 42, 96, 35, 31, 47, 55, 58, 88, 24, 0, 17, 54, 24, 36, 29, 85, 57}
-	grid[11] = [20]uint8{86, 56, 0, 48, 35, 71, 89, 7, 5, 44, 44, 37, 44, 60, 21, 58, 51, 54, 17, 58}
-	grid[12] = [20]uint8{19, 80, 81, 68, 5, 94, 47, 69, 28, 73, 92, 13, 86, 52, 17, 77, 4, 89, 55, 40}
-	grid[13] = [20]uint8{4, 52, 8, 83, 97, 35, 99, 16, 7, 97, 57, 32, 16, 26, 26, 79, 33, 27, 98, 66}
-	grid[14] = [20]uint8{88, 36, 68, 87, 57, 62, 20, 72, 3, 46, 33, 67, 46, 55, 12, 32, 63, 93, 53, 69}
-	grid[15] = [20]uint8{4, 42, 16, 73, 38, 25, 39, 11, 24, 94, 72, 18, 8, 46, 29, 32, 40, 62, 76, 36}
-	grid[16] = [20]uint8{20, 69, 36, 41, 72, 30, 23, 88, 34, 62, 99, 69, 82, 67, 59, 85, 74, 4, 36, 16}
-	grid[17] = [20]uint8{20, 73, 35, 29, 78, 31, 90, 1, 74, 31, 49, 71, 48, 86, 81, 16, 23, 57, 5, 54}
-	grid[18] = [20]uint8{1, 70, 54, 71, 83, 51, 54, 69, 16, 92, 33, 48, 61, 43, 52, 1, 89, 19, 67, 48}
-	for i := range grid {
-		fmt.Printf("%02v\n", grid[i])
+	grid[9] = [20]uint8{21, 36, 23, 9, 75, 0, 76, 44, 20, 45, 35, 14, 0, 61, 33, 97, 34, 31, 33, 95}
+	grid[10] = [20]uint8{78, 17, 53, 28, 22, 75, 31, 67, 15, 94, 3, 80, 4, 62, 16, 14, 9, 53, 56, 92}
+	grid[11] = [20]uint8{16, 39, 5, 42, 96, 35, 31, 47, 55, 58, 88, 24, 0, 17, 54, 24, 36, 29, 85, 57}
+	grid[12] = [20]uint8{86, 56, 0, 48, 35, 71, 89, 7, 5, 44, 44, 37, 44, 60, 21, 58, 51, 54, 17, 58}
+	grid[13] = [20]uint8{19, 80, 81, 68, 5, 94, 47, 69, 28, 73, 92, 13, 86, 52, 17, 77, 4, 89, 55, 40}
+	grid[14] = [20]uint8{4, 52, 8, 83, 97, 35, 99, 16, 7, 97, 57, 32, 16, 26, 26, 79, 33, 27, 98, 66}
+	grid[15] = [20]uint8{88, 36, 68, 87, 57, 62, 20, 72, 3, 46, 33, 67, 46, 55, 12, 32, 63, 93, 53, 69}
+	grid[16] = [20]uint8{4, 42, 16, 73, 38, 25, 39, 11, 24, 94, 72, 18, 8, 46, 29, 32, 40, 62, 76, 36}
+	grid[17] = [20]uint8{20, 69, 36, 41, 72, 30, 23, 88, 34, 62, 99, 69, 82, 67, 59, 85, 74, 4, 36, 16}
+	grid[18] = [20]uint8{20, 73, 35, 29, 78, 31, 90, 1, 74, 31, 49, 71, 48, 86, 81, 16, 23, 57, 5, 54}
+	grid[19] = [20]uint8{1, 70, 54, 71, 83, 51, 54, 69, 16, 92, 33, 48, 61, 43, 52, 1, 89, 19, 67, 48}
+	n, err := strconv.Atoi(os.Args[1])
+	if err != nil {
+		panic(err)
+	}
+	c := make(chan int)
+	biggest := 0
+	go Step(0, 0, n, c)
+	for result, i := 0, 0; result != -1 && i < 1000000; i++ {
+		if result > biggest {
+			biggest = result
+			fmt.Println(biggest)
+		}
+		result = <-c
+	}
+	for i := range resultgrid {
+		fmt.Printf("%1v\n", resultgrid[i])
 	}
 }
