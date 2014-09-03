@@ -14,9 +14,7 @@ func bigPower(exponent int) string {
 }
 
 func sumDigits(digits string) (sum int) {
-	fmt.Println(digits)
 	for _, r := range digits {
-		fmt.Printf("%d\n", r-'0')
 		sum += int(r - '0')
 	}
 	return
