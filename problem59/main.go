@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"fmt"
 	"io"
 	"io/ioutil"
 	"sort"
@@ -38,19 +39,20 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	//This "CSV" file only has comma's, no need for anything heavy handed.
+	//This "CSV" file only has commas, no need for anything heavy handed.
 	noComma := bytes.Split(file, []byte(","))
+	//We need to remove the newline character.
+	noComma[len(noComma)-1] = bytes.TrimSuffix(noComma[len(noComma)-1], []byte("\n"))
 	//We need to convert the ASCII characters to integers in this case, the input file is a bit stupid
 	noAscii := make([]byte, len(noComma))
 	for i, v := range noComma {
 		tmp, err := strconv.ParseUint(string(v), 0, 8)
+		//ie value is bigger than a byte
 		if err != nil {
 			panic(err)
 		}
 		noAscii[i] = byte(uint8(tmp))
 	}
-	//Turn a two level slice in to a single slice
-	//decoded := bytes.Join(noAscii, nil)
 	//Turn the slice in to a bytes.Buffer
 	buffer := bytes.NewBuffer(noAscii)
 
@@ -84,6 +86,7 @@ Loop:
 	//Check every character as an Xor candidate that has at least one hit
 	for i := 0; frequencies[i].c != 0; i++ {
 		decoded := xorTest(splits[0].Bytes(), frequencies[i].r)
+		fmt.Println(decoded)
 	}
 }
 
