@@ -112,6 +112,7 @@ Loop2:
 		}
 	}
 	fmt.Println(string(buffer.Bytes()))
+	fmt.Println(buffer.Bytes())
 }
 
 func byteFrequencies(s []byte) byteCounts {
@@ -129,7 +130,7 @@ func byteFrequencies(s []byte) byteCounts {
 func xorTest(s []byte, cmp byte) []byte {
 	x := make([]byte, len(s))
 	for i, v := range s {
-		x[i] = cmp ^ v
+		x[i] = cmp ^ v + ' '
 	}
 	return x
 }
