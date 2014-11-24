@@ -80,17 +80,41 @@ Loop:
 		}
 	}
 
-	frequencies := frequencies(splits[0].Bytes())
-	sort.Sort(sort.Reverse(frequencies))
-
-	//Check every character as an Xor candidate that has at least one hit
-	for i := 0; frequencies[i].c != 0; i++ {
-		decoded := xorTest(splits[0].Bytes(), frequencies[i].r)
-		fmt.Println(decoded)
+	frequencies := make([]byteCounts, len(splits))
+	for i := range frequencies {
+		frequencies[i] = byteFrequencies(splits[i].Bytes())
+		sort.Sort(sort.Reverse(frequencies[i]))
 	}
+	//unXor holds the unxored values
+	unXor := make([]bytes.Buffer, keySize)
+	for i := range splits {
+		decoded := xorTest(splits[i].Bytes(), frequencies[i][0].r)
+		unXor[i].Write(decoded)
+	}
+	// Break label exists to not have a multi level break manually
+Loop2:
+	//While there are bytes in the buffer keep splitting
+	for {
+		for i := range unXor {
+			tmp, err := unXor[i].ReadByte()
+			if err != nil {
+				//We expect to hit EOF at some point.
+				if err != io.EOF {
+					panic(err)
+				} else {
+					break Loop2
+				}
+			}
+			err = buffer.WriteByte(tmp)
+			if err != nil {
+				panic(err)
+			}
+		}
+	}
+	fmt.Println(string(buffer.Bytes()))
 }
 
-func frequencies(s []byte) byteCounts {
+func byteFrequencies(s []byte) byteCounts {
 	//Only take 7 bit ASCII in to account.
 	ret := make([]byteCount, 128)
 	for i := range ret {
