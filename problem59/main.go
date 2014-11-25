@@ -112,7 +112,11 @@ Loop2:
 		}
 	}
 	fmt.Println(string(buffer.Bytes()))
-	fmt.Println(buffer.Bytes())
+	var sum int64
+	for _, v := range buffer.Bytes() {
+		sum += int64(v)
+	}
+	fmt.Printf("Sum of ASCII characters: %d\n", sum)
 }
 
 func byteFrequencies(s []byte) byteCounts {
@@ -130,7 +134,12 @@ func byteFrequencies(s []byte) byteCounts {
 func xorTest(s []byte, cmp byte) []byte {
 	x := make([]byte, len(s))
 	for i, v := range s {
+		//The space is needed to flip case
 		x[i] = cmp ^ v + ' '
+		//Similarly the space increases the difference for caps from 32 to 64
+		if x[i]&128 != 0 {
+			x[i] -= 64
+		}
 	}
 	return x
 }
