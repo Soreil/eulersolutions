@@ -4,19 +4,6 @@ import "fmt"
 
 type numberType int
 
-func (n numberType) String() string {
-	switch n {
-	case deficient:
-		return "deficient"
-	case perfect:
-		return "perfect"
-	case abundant:
-		return "abundant"
-	default:
-		return "error"
-	}
-}
-
 const (
 	deficient numberType = iota
 	perfect
@@ -27,10 +14,6 @@ const (
 type typedNumber struct {
 	num int
 	t   numberType
-}
-
-func (t typedNumber) String() string {
-	return fmt.Sprintf("%d %s", t.num, t.t)
 }
 
 //all primes lower than sqrt of lim
@@ -56,7 +39,7 @@ func main() {
 	twoAbundants := *new([]int)
 	noTwoAbundants := *new([]int)
 	//check all numbers that can be the sum of two abundant numbers
-	for i := 1; i <= 28123; i++ {
+	for i := 1; i <= lim; i++ {
 		//label to exit in case of success of inner loop
 	numberFound:
 		//Check all numbers lower than the number we want to know the state of
