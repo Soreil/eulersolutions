@@ -1,6 +1,10 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+
+	"github.com/davecheney/profile"
+)
 
 type numberType int
 
@@ -25,19 +29,26 @@ var primes = []int{2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41,
 var lim = 28123
 
 func main() {
+	//profiling support
+	defer profile.Start(profile.CPUProfile).Stop()
+
 	nums := make([]typedNumber, lim) //all numbers and their type
 	abundantNums := *new([]int)      //all of the abundant numbers
+
 	for i := range nums {
 		nums[i].num = i
 		nums[i].t = sumType(divisorSum(nums[i].num), nums[i].num)
 	}
+
 	for i := 1; i < len(nums); i++ {
 		if nums[i].t == abundant {
 			abundantNums = append(abundantNums, nums[i].num)
 		}
 	}
+
 	twoAbundants := *new([]int)
 	noTwoAbundants := *new([]int)
+
 	//check all numbers that can be the sum of two abundant numbers
 	for i := 1; i <= lim; i++ {
 		//label to exit in case of success of inner loop
@@ -51,6 +62,7 @@ func main() {
 				}
 			}
 		}
+
 		//if Not possible to form i from two abundant sumbers
 		if len(twoAbundants) > 0 {
 			if twoAbundants[len(twoAbundants)-1] != i {
@@ -60,6 +72,7 @@ func main() {
 			noTwoAbundants = append(noTwoAbundants, i)
 		}
 	}
+
 	fmt.Println("Amount of numbers that can't be formed from two abundant numbers:", len(noTwoAbundants))
 
 	sum := 0
