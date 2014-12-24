@@ -43,34 +43,72 @@ func factorial(n int64) int64 {
 	return n
 }
 
-func digits(n int64) []int64 {
-	var d int64
+func digits(n int64) []rune {
+	var d rune
 	length := int64(math.Log10(float64(n)) + 1)
-	digits := make([]int64, length)
+	digits := make([]rune, length)
 	for i := int64(0); i < length; i++ {
-		d = n % 10
+		d = rune(n%10) + '0'
 		n /= 10
 		digits[length-i-1] = d
 	}
 	return digits
 }
 
-func permutations(n int64) [][]int64 {
-	length := int64(math.Log10(float64(n)) + 1)
-	fact := factorial(length)
-	perms := make([][]int64, fact)
+func genPermutations(n int64) []string {
 	digits := digits(n)
-	perms[0] = digits
-	for i := 1; i < len(perms); i++ {
-		perms[i] = digits
+	length := int64(math.Log10(float64(n)) + 1)
+	pChan := make(chan string)
+	go permute(digits, length, pChan)
+	fact := factorial(length)
+	retSlice := make([]string, fact)
+	for i := range retSlice {
+		retSlice[i] = <-pChan
+	}
+	return retSlice
+}
+
+func permute(s []rune, n int64, c chan string) {
+	if n == 1 {
+		c <- string(s)
+	} else {
+		for i := int64(0); i < n; i++ {
+			permute(s, n-1, c)
+			if n%2 == 1 {
+				s[0], s[n-1] = s[n-1], s[0]
+			} else {
+				s[i], s[n-1] = s[n-1], s[i]
+			}
+		}
+	}
+}
+
+func findSequence(s []int64) []int64 {
+	differences := make([]int64, len(s))
+	for i := 1; i < len(s); i++ {
+		differences[i] = s[i] - s[0]
 	}
 
-	return perms
+	return differences
 }
 
 func main() {
-	list := fill(10000)
-	sieve(&list)
-	list = clean(list)
-	fmt.Println(permutations(1478))
+	prime := fill(10000)
+	sieve(&prime)
+	prime = clean(prime)
+	perms := genPermutations(1487)
+	strPrime := make([]string, len(prime))
+	for i, v := range prime {
+		strPrime[i] = fmt.Sprint(v)
+	}
+	primePerms := make([]int64, 0)
+	for i, v := range strPrime {
+		for _, w := range perms {
+			if w == v {
+				primePerms = append(primePerms, prime[i])
+			}
+		}
+	}
+	PrimeSeq := findSequence(primePerms)
+	fmt.Println(PrimeSeq, len(PrimeSeq))
 }
