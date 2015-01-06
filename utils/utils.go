@@ -28,3 +28,23 @@ func Sieve(amount int) []int {
 	}
 	return ret
 }
+
+//Checks if a prime number,the caller is responsible for providing a large enough prime set
+func IsPrime(n int, primes []int) bool {
+	for _, v := range primes {
+		if v == n {
+			return true
+		} else if v > n {
+			return false
+		}
+	}
+	return false
+}
+
+func Factorial(n int) int {
+	total := 1
+	for i := n; i > 1; i-- {
+		total *= i
+	}
+	return total
+}
