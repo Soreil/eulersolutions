@@ -23,8 +23,7 @@ func main() {
 	biggest := 0
 	tmp := 0
 	for i := 1; i < n; i++ {
-		tmp = collatz(i, 0)
-		if tmp > biggest {
+		if tmp = collatz(i, 0); tmp > biggest {
 			biggest = tmp
 			fmt.Println(biggest, i)
 		}
