@@ -12,5 +12,10 @@ How many circular primes are there below one million?
 
 func main() {
 	lim := 2000000
-	primes := utils.Sieve(lim)
 }
+
+func permutations(n int) [][]int {
+	permutations := make([][]int, utils.Factorial(n))
+	perms(fact(4) = 4 perms(3) = 12 perms(2) = 24
+}
+
