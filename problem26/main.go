@@ -2,8 +2,6 @@ package main
 
 import "fmt"
 
-var lim int64 = 50
-
 func coprime10(n int64) bool {
 	for n%2 == 0 {
 		n /= 2
@@ -17,6 +15,7 @@ func coprime10(n int64) bool {
 	return false
 }
 
+//Calculates the greatest commmon divisor of two numbers
 func gcd(x, y int64) int64 {
 	var min int64
 	if x < y {
@@ -34,20 +33,23 @@ func gcd(x, y int64) int64 {
 }
 
 func main() {
-	for i := int64(2); i < lim; i++ {
+
+	var lim int64 = 1000
+
+	for d := int64(2); d < lim; d++ {
 		//Coprimes of 10(multiples of 2 and 5) can't be cyclic
-		if coprime10(i) {
+		if coprime10(d) {
 			continue
 		}
-		var j int64
+		var i int64
 		var tmp int64
-		for tmp, j = i, 1; gcd(tmp, 10) != 1; j++ {
-			tmp *= i
+		for tmp, i = d, 1; gcd(tmp, 10) != 1; i++ {
+			tmp *= d
 		}
-		if j == 1 {
-			fmt.Println(i, " ", i-1)
+		if i == 1 {
+			fmt.Println(d, " ", d-1)
 		} else {
-			fmt.Println(i, " ", j-1, "times something")
+			fmt.Println(d, " ", i-1, "times something")
 		}
 	}
 }
