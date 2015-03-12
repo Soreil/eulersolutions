@@ -7,8 +7,8 @@ import (
 )
 
 func pyTripple(m, n int) (a, b, c int) {
-	a = 2 * m * n
-	b = m*m - n*n
+	a = m*m - n*n
+	b = 2 * m * n
 	c = m*m + n*n
 	return
 }
