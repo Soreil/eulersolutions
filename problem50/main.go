@@ -20,15 +20,13 @@ func main() {
 			prime = v
 		}
 	}
-	fmt.Println(sum)
 	fmt.Println("Prime:", prime)
 }
 
 func consPrimeSum(p int, count int) []int {
-	if count > 100 {
+	if count > 10 {
 		return []int{}
 	}
-	fmt.Println(p, count)
 	var sum int
 	for i := range primes {
 		if i+count >= len(primes) {
