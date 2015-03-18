@@ -2,7 +2,12 @@ package main
 
 import "testing"
 
-var testCases = []struct {
+type testCase []struct {
+	hand     hand
+	expected bool
+}
+
+var testRFCases = []struct {
 	hand     hand
 	expected bool
 }{
@@ -48,10 +53,13 @@ var testCases = []struct {
 	},
 }
 
-func Test(t *testing.T) {
-	for _, test := range testCases {
+func Test_isRoyalFlush(t *testing.T) {
+	for _, test := range testRFCases {
 		if r := test.hand.isRoyalFlush(); r != test.expected {
 			t.Fatalf("isRoyalFlush(%v):%v, expected:%v\n", test.hand, test.expected, test.expected)
 		}
 	}
+}
+
+func Test_isStraightFlush(t *testing.T) {
 }
