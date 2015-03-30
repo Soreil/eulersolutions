@@ -1,5 +1,7 @@
 package utils
 
+import "math"
+
 //Sieve uses a sieve of Arosthesis to fill a slice of primes up to n
 func Sieve(amount int) []int {
 	//fill a slice on 1..n
@@ -41,10 +43,14 @@ func IsPrime(n int, primes []int) bool {
 	return false
 }
 
-func Factorial(n int) int {
-	total := 1
+func Factorial(n float64) float64 {
+	total := float64(1)
 	for i := n; i > 1; i-- {
 		total *= i
 	}
 	return total
+}
+
+func Same(a, b float64) bool {
+	return math.Abs(a-b) < 0.0001*math.Abs(a)
 }
